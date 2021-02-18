@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
-class ImageProvider extends ChangeNotifier {
+class MyImageProvider extends ChangeNotifier {
   var image;
 
   Future setImage(File file) async {

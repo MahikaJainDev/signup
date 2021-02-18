@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'file:///C:/Users/new/AndroidStudioProjects/flutter_app1/lib/widgets/signup.dart';
+import 'package:flutter_app1/widgets/signup.dart';
 
 void main() {
   runApp(MyApp());

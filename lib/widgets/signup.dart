@@ -9,7 +9,6 @@ import 'package:flutter_app1/providers/passwordProvider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_app1/providers/imageProvider.dart';
-import '../main.dart';
 
 class SignUp extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
@@ -173,12 +172,14 @@ class SignUp extends StatelessWidget {
 }
 
 class MyImage extends StatelessWidget {
-@override
-Widget build(BuildContext context) {
-  return ChangeNotifierProvider<ImageProvider>(
-    create: (context) => ImageProvider(),
-    child: Consumer<ImageProvider>(
-      builder: (context, provider, child) {
+
+
+  @override
+  Widget build(BuildContext context) {
+  return ChangeNotifierProvider<MyImageProvider>(
+    create: (context) => MyImageProvider(),
+    child: Consumer<MyImageProvider>(
+      builder: (providerContext, provider, child) {
         return Row(
           children: [
             if (provider.image == null)
@@ -195,11 +196,12 @@ Widget build(BuildContext context) {
             FlatButton(
               onPressed: () async {
                 showImagePickerDialog(
-                    context,
-                    imageFile: provider.image,
-                    onChange: (file){
-                      provider.setImage(file);
-                    }
+                  providerContext,
+                  imageFile: provider.image,
+                  onChange: (file){
+                    Navigator.of(context).pop();
+                    provider.setImage(file);
+                  }
                 );
               },
               child: Text('camera'),

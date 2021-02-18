@@ -22,7 +22,6 @@ showImagePickerDialog(
           onTap: () async{
             File file = await getImageCropped(imageFile);
             onChange(file);
-            Navigator.pop(context);
           },
         )
     );
@@ -33,7 +32,6 @@ showImagePickerDialog(
         onTap: () async{
           File file = await getImageFromSource(ImageSource.camera);
           onChange(file);
-          Navigator.pop(context);
         },
       )
   );
@@ -44,13 +42,14 @@ showImagePickerDialog(
         onTap: () async{
           File file = await getImageFromSource(ImageSource.gallery);
           onChange(file);
-          Navigator.pop(context);
+          // Navigator.pop(context);
         },
       )
   );
   showDialog(
       context: context,
       barrierDismissible: true,
+      useRootNavigator: false,
       builder: (context){
         return SimpleDialog(
           children: tiles,
@@ -62,6 +61,7 @@ showImagePickerDialog(
 Future<File> getImageFromSource(ImageSource source) async{
   PickedFile pickedFile = await ImagePicker().getImage(source: source, maxHeight: 800, maxWidth: 1200);
   File file = await getImageFromPicked(pickedFile);
+  // return file;
   File finalFile = await getImageCropped(file);
   return finalFile;
 }
@@ -73,16 +73,21 @@ Future<File> getImageFromPicked(PickedFile file) async{
 Future<File> getImageCropped(File image) async{
   return await ImageCropper.cropImage(
       sourcePath: image.path,
-      aspectRatio: CropAspectRatio(ratioX: 4.0, ratioY: 3.0),
+      aspectRatioPresets: [
+        CropAspectRatioPreset.square,
+        CropAspectRatioPreset.ratio3x2,
+        CropAspectRatioPreset.original,
+        CropAspectRatioPreset.ratio4x3,
+        CropAspectRatioPreset.ratio16x9
+      ],
       androidUiSettings: AndroidUiSettings(
-          toolbarTitle: 'Crop Image',
-
+          toolbarTitle: 'Cropper',
+          toolbarColor: Colors.deepOrange,
           toolbarWidgetColor: Colors.white,
-          lockAspectRatio: true
-      ),
+          initAspectRatio: CropAspectRatioPreset.original,
+          lockAspectRatio: false),
       iosUiSettings: IOSUiSettings(
-        title: 'Crop Image',
-        aspectRatioLockEnabled: true,
+        minimumAspectRatio: 1.0,
       )
   );
 }
